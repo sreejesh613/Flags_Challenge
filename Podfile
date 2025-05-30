@@ -6,7 +6,6 @@ target 'Flags Challenge' do
   use_frameworks!
 
   # Pods for Flags Challenge
-  pod 'AEOTPTextField'
 
   def testing_pods
       pod 'Quick'

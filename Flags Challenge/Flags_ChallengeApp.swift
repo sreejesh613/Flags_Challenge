@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct Flags_ChallengeApp: App {
+
     var body: some Scene {
         WindowGroup {
             TimeEntryView()
