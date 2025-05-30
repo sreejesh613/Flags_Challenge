@@ -11,47 +11,114 @@ struct ContentView: View {
     @State var timeRemaining = 10
     var body: some View {
         VStack {
-            HStack {
-                let timer = Timer.publish(
-                    every: 1,
-                    on: .main,
-                    in: .common).autoconnect()
-                Text("\(timeRemaining)")
-                    .onReceive(timer) { _ in
-                        if timeRemaining > 0 {
-                            print("timer running")
-                            timeRemaining -= 1
-                            print("\(timeRemaining)")
+            VStack {
+                HStack(alignment: .center) {
+                    let timer = Timer.publish(
+                        every: 1,
+                        on: .main,
+                        in: .common).autoconnect()
+                    Text("\(timeRemaining)")
+                        .onReceive(timer) { _ in
+                            if timeRemaining > 0 {
+                                print("timer running")
+                                timeRemaining -= 1
+                                print("\(timeRemaining)")
+                            }
                         }
-                    }
-                Spacer()
-                Text("FLAGS CHALLENGE")
+                    Spacer()
+                    Text("FLAGS CHALLENGE")
+                    Spacer()
+                }
+                .padding(.top, 20.0)
+                .padding(.horizontal, 10)
+                Divider()
+                    .frame(height: 1.0)
             }
-            .border(.blue)
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            HStack {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.black)
+                        .frame(width: 50.0, height: 35.0)
+                    Circle()
+                        .fill(Color(red: 255/255.0, green: 112/255.0, blue: 67/255.0, opacity: 1.0))
+                        .frame(width: 35.0, height: 35.0)
+                    Text("1")
+                        .foregroundStyle(.white)
+                }
+                Spacer()
+                Text("GUESS THE COUNTRY FROM THE FLAG?")
+                Spacer()
+            }
+            HStack {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .fill(Color(red: 217/255.0, green: 217/255.0, blue: 217/255.0, opacity: 0.3))
+                        .frame(width: 120.0, height: 90.0)
+                    Image("13")
+                        .frame(width: 72.0, height: 58.0)
+                }
+                Spacer()
+                customButtons()
+            }
+            .padding()
         }
-        .padding()
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(.black, lineWidth: 2)
+        )
+        .padding(.leading, 5)
+        .padding(.trailing, 5)
+        Spacer()
+    }
+
+    private func customButtons() -> some View {
+        HStack {
+            VStack {
+                Button(action: {
+                    //button action
+                }) {
+                    Text("Button A")
+                }
+                .buttonStyle(CustomButtonStyle())
+                Button(action: {
+                    //button action
+                }) {
+                    Text("Button B")
+                }
+                .buttonStyle(CustomButtonStyle())
+            }
+            VStack {
+                Button(action: {
+                    //button action
+                }) {
+                    Text("Button C")
+                }
+                .buttonStyle(CustomButtonStyle())
+                Button(action: {
+                    //button action
+                }) {
+                    Text("Button D")
+                }
+                .buttonStyle(CustomButtonStyle())
+            }
+        }
     }
 }
 
-//class QuestionTimer: ObservableObject {
-//    @Published var timeRemaining = 10
-//    var timer = Timer.publish(
-//        every: 1,
-//        on: .main,
-//        in: .common).autoconnect()
-//    Text("\(timeRemaining)")
-//        .onReceive(timer) { _ in
-//            if timeRemaining > 0 {
-//                print("timer running")
-//                timeRemaining = timeRemaining - 1
-//                print("\(timeRemaining)")
-//            }
-//        }
-//}
+struct CustomButtonStyle: ButtonStyle {
+    func makeBody(configuration: Self.Configuration) -> some View {
+        return configuration.label
+            .padding()
+            .foregroundColor(Color(red: 58/255, green: 58/255, blue: 58/255, opacity: 1))
+            .opacity(configuration.isPressed ? 0.7 : 1)
+            .scaleEffect(configuration.isPressed ? 0.8 : 1)
+            .frame(maxWidth: .infinity, maxHeight: 32.0)
+            .overlay {
+                RoundedRectangle(cornerRadius: 8.0)
+                    .stroke(Color(red: 72/255, green: 72/255, blue: 72/255, opacity: 1))
+            }
+    }
+}
 
 #Preview {
     ContentView()
