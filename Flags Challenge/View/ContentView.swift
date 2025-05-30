@@ -64,6 +64,7 @@ struct ContentView: View {
                     .padding()
                     Spacer()
                 }
+                .applyBaseViewStyle()
             }
             .frame(width: .infinity, height: 270)
             .padding(.horizontal, 5.0)

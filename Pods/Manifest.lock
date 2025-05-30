@@ -1,5 +1,4 @@
 PODS:
-  - AEOTPTextField (1.2.6)
   - CwlCatchException (2.2.1):
     - CwlCatchExceptionSupport (~> 2.2.1)
   - CwlCatchExceptionSupport (2.2.1)
@@ -14,13 +13,11 @@ PODS:
   - Quick (7.6.2)
 
 DEPENDENCIES:
-  - AEOTPTextField
   - Nimble
   - Quick
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
-    - AEOTPTextField
     - CwlCatchException
     - CwlCatchExceptionSupport
     - CwlMachBadInstructionHandler
@@ -30,7 +27,6 @@ SPEC REPOS:
     - Quick
 
 SPEC CHECKSUMS:
-  AEOTPTextField: a275823fde05601c5da7f8fb66aaecb41289b370
   CwlCatchException: 7acc161b299a6de7f0a46a6ed741eae2c8b4d75a
   CwlCatchExceptionSupport: 54ccab8d8c78907b57f99717fb19d4cc3bce02dc
   CwlMachBadInstructionHandler: dae4fdd124d45c9910ac240287cc7b898f4502a1
@@ -39,6 +35,6 @@ SPEC CHECKSUMS:
   Nimble: 317d713c30c3336dd8571da1889f7ec3afc626e8
   Quick: b8bec97cd4b9f21da0472d45580f763b801fc353
 
-PODFILE CHECKSUM: e39f79ab20f144711617168d1b5f08f6ebbb2bd9
+PODFILE CHECKSUM: c2308e9aebfed8c71cdc1541425ef193be66380a
 
 COCOAPODS: 1.16.2
