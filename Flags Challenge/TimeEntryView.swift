@@ -72,9 +72,7 @@ struct TimeEntryView: View {
                         }
                     }
                 }
-                .frame(width: .infinity, height: 270.0)
-                .padding(.leading, 5)
-                .padding(.trailing, 5)
+                .frame(width: .infinity, height: 250)
                 Spacer()
             }
         }
