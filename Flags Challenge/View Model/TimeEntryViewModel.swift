@@ -12,6 +12,7 @@ class TimeEntryViewModel: ObservableObject {
     @Published var seconds = ""
     @Published var timeRemaining: Int = 0
     @Published var isTimerRunning = false
+    @Published var isTimerInvalidated = false
     
     private var timer: Timer?
     
@@ -47,6 +48,7 @@ class TimeEntryViewModel: ObservableObject {
         guard isTimerRunning else { return }
         isTimerRunning = false
         timer?.invalidate()
+        isTimerInvalidated = true
         timer = nil
     }
     

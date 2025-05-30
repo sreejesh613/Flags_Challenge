@@ -60,6 +60,9 @@ struct TimeEntryView: View {
                     .applyBaseViewStyle()
                 }
             }
+            .fullScreenCover(isPresented: $timeEntryViewModel.isTimerInvalidated) {
+                ContentView()
+            }
             .frame(width: .infinity, height: 270)
             .padding(.horizontal, 5.0)
             Spacer()
