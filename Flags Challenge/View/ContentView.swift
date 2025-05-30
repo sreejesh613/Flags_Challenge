@@ -12,13 +12,6 @@ struct ContentView: View {
     var body: some View {
         VStack {
             ZStack {
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color(
-                        red: 217/255.0,
-                        green: 217/255.0,
-                        blue: 217/255.0,
-                        opacity: 0.3
-                    ))
                 VStack {
                     HStack(alignment: .center) {
                         let timer = Timer.publish(
@@ -60,19 +53,19 @@ struct ContentView: View {
                     }
                     HStack {
                         ZStack {
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(Color(red: 217/255.0, green: 217/255.0, blue: 217/255.0, opacity: 0.3))
-                                .frame(width: 120.0, height: 90.0)
                             Image("13")
                                 .frame(width: 72.0, height: 58.0)
+                                .applyBaseViewStyle()
+                                .frame(width: 120.0, height: 90.0)
                         }
                         Spacer()
                         customButtons()
                     }
                     .padding()
+                    Spacer()
                 }
             }
-            .frame(width: .infinity, height: 250)
+            .frame(width: .infinity, height: 270)
             .padding(.horizontal, 5.0)
         }
         Spacer()
