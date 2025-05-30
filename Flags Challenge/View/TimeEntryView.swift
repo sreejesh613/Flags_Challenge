@@ -6,11 +6,10 @@
 //
 
 import SwiftUI
-import AEOTPTextField
 
 struct TimeEntryView: View {
     @State private var time: String = ""
-    @StateObject private var timeEntryViewModel = TimeEntryViewModel()
+    @StateObject private var timerViewModel = TimerViewModel()
     @State private var startCountdown: Bool = false
 
     var body: some View {
@@ -31,25 +30,25 @@ struct TimeEntryView: View {
                             .border(.black)
                             .padding(.top, 10)
                         HStack(spacing: 10.0) {
-                            TextField("HH", text: $timeEntryViewModel.hours)
+                            TextField("HH", text: $timerViewModel.hours)
                                 .keyboardType(.numberPad)
                                 .frame(width: 50.0)
                                 .textFieldStyle(.roundedBorder)
                             Text(":")
-                            TextField("MM", text: $timeEntryViewModel.minutes)
+                            TextField("MM", text: $timerViewModel.minutes)
                                 .keyboardType(.numberPad)
                                 .frame(width: 50.0)
                                 .textFieldStyle(.roundedBorder)
                             Text(":")
-                            TextField("SS", text: $timeEntryViewModel.seconds)
+                            TextField("SS", text: $timerViewModel.seconds)
                                 .keyboardType(.numberPad)
                                 .frame(width: 50.0)
                                 .textFieldStyle(.roundedBorder)
                         }
                         Button(action: {
                             dump("Save button pressed!")
+                            timerViewModel.startCountDownTimerFromInput()
                             startCountdown = true
-                            timeEntryViewModel.startTimer()
                         }) { Text("Save")
                                 .frame(width: 110.0, height: 35.0)
                                 .background(Color.orange)
@@ -60,7 +59,7 @@ struct TimeEntryView: View {
                     .applyBaseViewStyle()
                 }
             }
-            .fullScreenCover(isPresented: $timeEntryViewModel.isTimerInvalidated) {
+            .fullScreenCover(isPresented: $timerViewModel.isTimerInvalidated) {
                 ContentView()
             }
             .frame(width: .infinity, height: 270)
@@ -91,7 +90,7 @@ struct TimeEntryView: View {
             Text("WILL START IN")
                 .font(.system(size: 24, weight: .semibold))
                 .padding(.bottom, 15)
-            Text(timeEntryViewModel.formattedTime)
+            Text(timerViewModel.formattedTime)
                 .font(.system(size: 28.0, weight: .semibold))
                 .foregroundStyle(Color(red: 120.0/255.0, green: 120.0/255.0, blue: 120.0/255.0, opacity: 1.0))
         }

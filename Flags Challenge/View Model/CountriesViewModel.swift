@@ -8,12 +8,17 @@
 import Foundation
 
 class CountriesViewModel: ObservableObject {
-    @Published var countries: Questions = Questions()
+    @Published var countries: Questions? {
+        didSet {
+            totalQuestions = countries?.questions.count ?? 0
+        }
+    }
+    @Published var totalQuestions: Int = 0
     @Published var currentCountryIndex = 0
     
     var currentAnswer: Answer? {
-        guard ((countries.questions?.indices.contains(currentCountryIndex)) != nil) else { return nil }
-        return countries.questions?[currentCountryIndex]
+        guard let questions = countries?.questions, questions.indices.contains(currentCountryIndex) else { return nil }
+        return countries?.questions[currentCountryIndex]
     }
     
     func loadQuestions() {
@@ -22,7 +27,7 @@ class CountriesViewModel: ObservableObject {
     }
     
     func nextAnswer() {
-        if currentCountryIndex < (countries.questions?.count ?? 0) - 1 {
+        if currentCountryIndex < (countries?.questions.count ?? 0) - 1 {
             currentCountryIndex += 1
         } else {
             currentCountryIndex = 0
@@ -30,7 +35,7 @@ class CountriesViewModel: ObservableObject {
     }
     
     func checkAnswer(selectedAnswer: Int) -> Answer? {
-        countries.questions!.first(where: { question in
+        countries?.questions.first(where: { question in
             question.countries.contains(where: { $0.id == selectedAnswer })
         })
     }

@@ -8,10 +8,7 @@
 import Foundation
 
 struct Questions: Decodable {
-    let questions: [Answer]?
-    init(questions: [Answer]? = nil) {
-        self.questions = questions
-    }
+    let questions: [Answer]
 }
 
 struct Answer: Decodable {
