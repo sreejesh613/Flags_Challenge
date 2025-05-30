@@ -24,7 +24,16 @@ class TimerViewModel: ObservableObject {
         return String(format: "%02d:%02d:%02d", hrs, mins, secs)
     }
     
-    func startTimer(_ duration: Int) {
+    func startCountDownTimerFromInput() {
+        let hrs = Int(hours) ?? 0
+        let mns = Int(minutes) ?? 0
+        let sec = Int(seconds) ?? 0
+        
+        let total = (hrs * 3600) + (mns * 60) + sec
+        startTimer(duration: total)
+    }
+    
+    func startTimer(duration: Int) {
         timeRemaining = duration
         isTimerInvalidated = false
         isTimerRunning = true

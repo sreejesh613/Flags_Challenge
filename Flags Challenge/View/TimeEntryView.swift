@@ -47,10 +47,8 @@ struct TimeEntryView: View {
                         }
                         Button(action: {
                             dump("Save button pressed!")
+                            timerViewModel.startCountDownTimerFromInput()
                             startCountdown = true
-                            let durationInSeconds = timerViewModel.totalTimeDurationInSeconds(timerViewModel.formattedTime)
-                            
-                            timerViewModel.startTimer(durationInSeconds)
                         }) { Text("Save")
                                 .frame(width: 110.0, height: 35.0)
                                 .background(Color.orange)

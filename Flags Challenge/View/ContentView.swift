@@ -10,38 +10,23 @@ import SwiftUI
 struct ContentView: View {
     @State var timeRemaining = 10
     @StateObject private var questionsViewModel = CountriesViewModel()
+    @StateObject private var timerViewModel = TimerViewModel()
     @State private var totalQuestions: Int = 0
-    @State private var currentQuestion = 0
-    @State private var isTimerInvalidated = false
     @State private var currentAnswer: Answer?
-    @State private var isTImerRunning = false
+    @State private var currentIndex: Int = 0
     
     var body: some View {
         VStack {
             ZStack {
                 VStack {
                     HStack(alignment: .center) {
-                        let timer = Timer.publish(
-                            every: 1,
-                            on: .main,
-                            in: .common)
-                            .autoconnect()
-                        Text("\(timeRemaining)")
-                            .onReceive(timer) { _ in
-                                isTImerRunning = true
-                                if timeRemaining > 0 {
-                                    print("timer running")
-                                    timeRemaining -= 1
-                                    print("\(timeRemaining)")
-                                } else {
-                                    timer.upstream.connect().cancel()
-                                    isTimerInvalidated = true
-                                    isTImerRunning = false
-                                }
-                            }
+                        Text("\(timerViewModel.timeRemaining)")
                         Spacer()
                         Text("FLAGS CHALLENGE")
                         Spacer()
+                    }
+                    .onAppear {
+                        timerViewModel.startTimer(duration: 10)
                     }
                     .padding(.top, 20.0)
                     .padding(.horizontal, 10)
@@ -57,7 +42,7 @@ struct ContentView: View {
                             Circle()
                                 .fill(Color(red: 255/255.0, green: 112/255.0, blue: 67/255.0, opacity: 1.0))
                                 .frame(width: 35.0, height: 35.0)
-                            Text("\(currentQuestion)" + "/" +  "\(totalQuestions)")
+                            Text("\(currentIndex)" + "/" +  "\(totalQuestions)")
                                 .foregroundStyle(.white)
                         }
                         Spacer()
@@ -84,20 +69,24 @@ struct ContentView: View {
         }
         .onAppear {
             questionsViewModel.loadQuestions()
-            if isTimerInvalidated || !isTImerRunning {
-                questionsViewModel.nextAnswer()
-                currentAnswer = questionsViewModel.currentAnswer
-            }
         }
-        .onChange(of: isTimerInvalidated) { oldValue, newValue in
+        .onChange(of: timerViewModel.isTimerInvalidated) { _, newValue in
             if newValue {
                 questionsViewModel.nextAnswer()
                 currentAnswer = questionsViewModel.currentAnswer
+                currentIndex = questionsViewModel.currentCountryIndex
+
+                timerViewModel.startTimer(duration: 10)
             }
         }
         .onReceive(questionsViewModel.$countries.compactMap { $0 }) { countries in
             totalQuestions =  countries.questions.count
-            currentQuestion = 1
+            questionsViewModel.currentCountryIndex = 0
+            questionsViewModel.nextAnswer()
+            currentIndex = questionsViewModel.currentCountryIndex
+            currentAnswer = questionsViewModel.currentAnswer
+            
+            timerViewModel.startTimer(duration: 10)
             print("Total questions: \(totalQuestions)")
         }
         Spacer()
