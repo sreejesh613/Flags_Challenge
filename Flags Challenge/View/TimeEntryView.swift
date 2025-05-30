@@ -10,23 +10,21 @@ import AEOTPTextField
 
 struct TimeEntryView: View {
     @State private var time: String = ""
-    @State private var navPath = NavigationPath()
     @StateObject private var timeEntryViewModel = TimeEntryViewModel()
+    @State private var startCountdown: Bool = false
 
     var body: some View {
         VStack {
             ZStack(alignment: .center) {
-                NavigationStack(path: $navPath) {
+                if startCountdown {
+                    VStack(spacing: 20.0) {
+                        commonTitle()
+                        countDownTimer()
+                    }
+                    .applyBaseViewStyle()
+                } else {
                     VStack {
-                        VStack(alignment: .center) {
-                            Text("FLAGS CHALLENGE")
-                                .foregroundStyle(.red)
-                                .fontWeight(.heavy)
-                                .bold()
-                        }
-                        .padding(.horizontal, 10)
-                        Divider()
-                            .frame(height: 1.0)
+                        commonTitle()
                         Text("SCHEDULE")
                             .fontWeight(.heavy)
                             .bold()
@@ -50,7 +48,8 @@ struct TimeEntryView: View {
                         }
                         Button(action: {
                             dump("Save button pressed!")
-                            navPath.append(Screen.secondScreen)
+                            startCountdown = true
+                            timeEntryViewModel.startTimer()
                         }) { Text("Save")
                                 .frame(width: 110.0, height: 35.0)
                                 .background(Color.orange)
@@ -58,18 +57,40 @@ struct TimeEntryView: View {
                                 .cornerRadius(7.0)
                         }
                     }
-                    .navigationDestination(for: Screen.self) { screen in
-                        switch screen {
-                        case .secondScreen:
-                            ContentView()
-                        }
-                    }
+                    .applyBaseViewStyle()
                 }
-                .applyBaseViewStyle()
             }
             .frame(width: .infinity, height: 270)
             .padding(.horizontal, 5.0)
             Spacer()
+        }
+    }
+    
+    private func commonTitle() -> some View {
+        VStack {
+            VStack(alignment: .center) {
+                Text("FLAGS CHALLENGE")
+                    .foregroundStyle(.red)
+                    .fontWeight(.heavy)
+                    .bold()
+            }
+            .padding(.horizontal, 10)
+            Divider()
+                .frame(height: 1.0)
+        }
+    }
+    
+    private func countDownTimer() -> some View {
+        VStack {
+            Text("CHALLENGE")
+                .font(.system(size: 18.0, weight: .semibold))
+                .padding(.bottom, 10)
+            Text("WILL START IN")
+                .font(.system(size: 24, weight: .semibold))
+                .padding(.bottom, 15)
+            Text(timeEntryViewModel.formattedTime)
+                .font(.system(size: 28.0, weight: .semibold))
+                .foregroundStyle(Color(red: 120.0/255.0, green: 120.0/255.0, blue: 120.0/255.0, opacity: 1.0))
         }
     }
 }
