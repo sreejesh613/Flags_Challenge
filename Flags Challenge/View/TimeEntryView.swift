@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import AEOTPTextField
 
 struct TimeEntryView: View {
     @State private var time: String = ""

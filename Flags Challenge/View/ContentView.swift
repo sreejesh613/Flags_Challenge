@@ -9,6 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
     @State var timeRemaining = 10
+    @StateObject private var questionsViewModel = CountriesViewModel()
+    @State private var totalQuestions: Int = 0
+    @State private var currentQuestion = 0
+    @State private var isTimerInvalidated = false
+    @State private var currentAnswer: Answer?
+    @State private var isTImerRunning = false
+    
     var body: some View {
         VStack {
             ZStack {
@@ -17,13 +24,19 @@ struct ContentView: View {
                         let timer = Timer.publish(
                             every: 1,
                             on: .main,
-                            in: .common).autoconnect()
+                            in: .common)
+                            .autoconnect()
                         Text("\(timeRemaining)")
                             .onReceive(timer) { _ in
+                                isTImerRunning = true
                                 if timeRemaining > 0 {
                                     print("timer running")
                                     timeRemaining -= 1
                                     print("\(timeRemaining)")
+                                } else {
+                                    timer.upstream.connect().cancel()
+                                    isTimerInvalidated = true
+                                    isTImerRunning = false
                                 }
                             }
                         Spacer()
@@ -44,7 +57,7 @@ struct ContentView: View {
                             Circle()
                                 .fill(Color(red: 255/255.0, green: 112/255.0, blue: 67/255.0, opacity: 1.0))
                                 .frame(width: 35.0, height: 35.0)
-                            Text("1")
+                            Text("\(currentQuestion)" + "/" +  "\(totalQuestions)")
                                 .foregroundStyle(.white)
                         }
                         Spacer()
@@ -53,7 +66,7 @@ struct ContentView: View {
                     }
                     HStack {
                         ZStack {
-                            Image("13")
+                            Image("\(currentAnswer?.answer_id ?? 113)")
                                 .frame(width: 72.0, height: 58.0)
                                 .applyBaseViewStyle()
                                 .frame(width: 120.0, height: 90.0)
@@ -69,38 +82,54 @@ struct ContentView: View {
             .frame(width: .infinity, height: 270)
             .padding(.horizontal, 5.0)
         }
+        .onAppear {
+            questionsViewModel.loadQuestions()
+            if isTimerInvalidated || !isTImerRunning {
+                questionsViewModel.nextAnswer()
+                currentAnswer = questionsViewModel.currentAnswer
+            }
+        }
+        .onChange(of: isTimerInvalidated) { oldValue, newValue in
+            if newValue {
+                questionsViewModel.nextAnswer()
+                currentAnswer = questionsViewModel.currentAnswer
+            }
+        }
+        .onReceive(questionsViewModel.$countries.compactMap { $0 }) { countries in
+            totalQuestions =  countries.questions.count
+            currentQuestion = 1
+            print("Total questions: \(totalQuestions)")
+        }
         Spacer()
     }
 
     private func customButtons() -> some View {
         HStack {
             VStack {
-                Button(action: {
-                    //button action
-                }) {
-                    Text("Button A")
+                if let countries = currentAnswer?.countries, countries.count >= 4 {
+                    VStack(spacing: 16) {
+                        HStack(spacing: 16) {
+                            ForEach(0..<2, id: \.self) { index in
+                                Button(action: {
+                                    //Button action
+                                }) {
+                                    Text(countries[index].country_name)
+                                }
+                                .buttonStyle(CustomButtonStyle())
+                            }
+                        }
+                        HStack(spacing: 16) {
+                            ForEach(2..<4, id: \.self) { index in
+                                Button(action: {
+                                    //Button action
+                                }) {
+                                    Text(countries[index].country_name)
+                                }
+                                .buttonStyle(CustomButtonStyle())
+                            }
+                        }
+                    }
                 }
-                .buttonStyle(CustomButtonStyle())
-                Button(action: {
-                    //button action
-                }) {
-                    Text("Button B")
-                }
-                .buttonStyle(CustomButtonStyle())
-            }
-            VStack {
-                Button(action: {
-                    //button action
-                }) {
-                    Text("Button C")
-                }
-                .buttonStyle(CustomButtonStyle())
-                Button(action: {
-                    //button action
-                }) {
-                    Text("Button D")
-                }
-                .buttonStyle(CustomButtonStyle())
             }
         }
     }
