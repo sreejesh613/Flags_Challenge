@@ -11,63 +11,69 @@ struct ContentView: View {
     @State var timeRemaining = 10
     var body: some View {
         VStack {
-            VStack {
-                HStack(alignment: .center) {
-                    let timer = Timer.publish(
-                        every: 1,
-                        on: .main,
-                        in: .common).autoconnect()
-                    Text("\(timeRemaining)")
-                        .onReceive(timer) { _ in
-                            if timeRemaining > 0 {
-                                print("timer running")
-                                timeRemaining -= 1
-                                print("\(timeRemaining)")
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color(
+                        red: 217/255.0,
+                        green: 217/255.0,
+                        blue: 217/255.0,
+                        opacity: 0.3
+                    ))
+                VStack {
+                    HStack(alignment: .center) {
+                        let timer = Timer.publish(
+                            every: 1,
+                            on: .main,
+                            in: .common).autoconnect()
+                        Text("\(timeRemaining)")
+                            .onReceive(timer) { _ in
+                                if timeRemaining > 0 {
+                                    print("timer running")
+                                    timeRemaining -= 1
+                                    print("\(timeRemaining)")
+                                }
                             }
+                        Spacer()
+                        Text("FLAGS CHALLENGE")
+                        Spacer()
+                    }
+                    .padding(.top, 20.0)
+                    .padding(.horizontal, 10)
+                    Divider()
+                        .frame(height: 1.0)
+                    Spacer()
+                    
+                    HStack {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.black)
+                                .frame(width: 50.0, height: 35.0)
+                            Circle()
+                                .fill(Color(red: 255/255.0, green: 112/255.0, blue: 67/255.0, opacity: 1.0))
+                                .frame(width: 35.0, height: 35.0)
+                            Text("1")
+                                .foregroundStyle(.white)
                         }
-                    Spacer()
-                    Text("FLAGS CHALLENGE")
-                    Spacer()
+                        Spacer()
+                        Text("GUESS THE COUNTRY FROM THE FLAG?")
+                        Spacer()
+                    }
+                    HStack {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .fill(Color(red: 217/255.0, green: 217/255.0, blue: 217/255.0, opacity: 0.3))
+                                .frame(width: 120.0, height: 90.0)
+                            Image("13")
+                                .frame(width: 72.0, height: 58.0)
+                        }
+                        Spacer()
+                        customButtons()
+                    }
+                    .padding()
                 }
-                .padding(.top, 20.0)
-                .padding(.horizontal, 10)
-                Divider()
-                    .frame(height: 1.0)
             }
-            HStack {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.black)
-                        .frame(width: 50.0, height: 35.0)
-                    Circle()
-                        .fill(Color(red: 255/255.0, green: 112/255.0, blue: 67/255.0, opacity: 1.0))
-                        .frame(width: 35.0, height: 35.0)
-                    Text("1")
-                        .foregroundStyle(.white)
-                }
-                Spacer()
-                Text("GUESS THE COUNTRY FROM THE FLAG?")
-                Spacer()
-            }
-            HStack {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(Color(red: 217/255.0, green: 217/255.0, blue: 217/255.0, opacity: 0.3))
-                        .frame(width: 120.0, height: 90.0)
-                    Image("13")
-                        .frame(width: 72.0, height: 58.0)
-                }
-                Spacer()
-                customButtons()
-            }
-            .padding()
+            .frame(width: .infinity, height: 250)
         }
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(.black, lineWidth: 2)
-        )
-        .padding(.leading, 5)
-        .padding(.trailing, 5)
         Spacer()
     }
 
