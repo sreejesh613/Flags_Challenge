@@ -73,6 +73,7 @@ struct ContentView: View {
                 }
             }
             .frame(width: .infinity, height: 250)
+            .padding(.horizontal, 5.0)
         }
         Spacer()
     }
