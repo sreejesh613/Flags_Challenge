@@ -15,15 +15,8 @@ struct TimeEntryView: View {
 
     var body: some View {
         VStack {
-            NavigationStack(path: $navPath) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color(
-                            red: 217/255.0,
-                            green: 217/255.0,
-                            blue: 217/255.0,
-                            opacity: 0.3
-                        ))
+            ZStack(alignment: .center) {
+                NavigationStack(path: $navPath) {
                     VStack {
                         VStack(alignment: .center) {
                             Text("FLAGS CHALLENGE")
@@ -72,10 +65,11 @@ struct TimeEntryView: View {
                         }
                     }
                 }
-                .frame(width: .infinity, height: 250)
-                .padding(.horizontal, 5.0)
-                Spacer()
+                .applyBaseViewStyle()
             }
+            .frame(width: .infinity, height: 270)
+            .padding(.horizontal, 5.0)
+            Spacer()
         }
     }
 }
