@@ -47,16 +47,22 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		05AC513C2DD746F40079FEA7 /* Flags Challenge */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = "Flags Challenge";
 			sourceTree = "<group>";
 		};
 		05AC514A2DD746F50079FEA7 /* Flags ChallengeTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = "Flags ChallengeTests";
 			sourceTree = "<group>";
 		};
 		05AC51542DD746F50079FEA7 /* Flags ChallengeUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = "Flags ChallengeUITests";
 			sourceTree = "<group>";
 		};
@@ -146,7 +152,6 @@
 				05AC51362DD746F40079FEA7 /* Sources */,
 				05AC51372DD746F40079FEA7 /* Frameworks */,
 				05AC51382DD746F40079FEA7 /* Resources */,
-				852019B3341796EB8AF017D5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -305,13 +310,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Flags ChallengeTests/Pods-Flags ChallengeTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Flags ChallengeTests/Pods-Flags ChallengeTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -326,38 +327,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Flags Challenge-Flags ChallengeUITests/Pods-Flags Challenge-Flags ChallengeUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Flags Challenge-Flags ChallengeUITests/Pods-Flags Challenge-Flags ChallengeUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
-			outputPaths = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Flags Challenge-Flags ChallengeUITests/Pods-Flags Challenge-Flags ChallengeUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		852019B3341796EB8AF017D5 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Flags Challenge/Pods-Flags Challenge-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Flags Challenge/Pods-Flags Challenge-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Flags Challenge/Pods-Flags Challenge-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		911352D2490542DF523D105A /* [CP] Check Pods Manifest.lock */ = {
