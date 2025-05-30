@@ -4,5 +4,6 @@
 .vscode
 
 */**/Pods
+**/*.xcuserstate
 */**/*.xcworkspace/xcuserdata
 */**/*.xcodeproj/xcuserdata
