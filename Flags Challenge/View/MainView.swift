@@ -126,6 +126,7 @@ struct MainView: View {
         Spacer()
     }
 
+    //Method to create 4 buttons in two rows and 4 texts below them
     @ViewBuilder
     private func customButtons() -> some View {
         HStack {
@@ -133,19 +134,27 @@ struct MainView: View {
                 if let countries = currentAnswer?.countries, countries.count >= 4 {
                     HStack(spacing: 16) {
                         ForEach(0..<2, id: \.self) { index in
+                            let style = getButtonStyle(for: countries[index])
                             VStack {
                                 makeButtons(for: countries[index])
-                                Text("Correct")
-                                    .font(.system(size:6, weight: .regular, design: .default))
+                                if style.showLabel {
+                                    Text(style.labelText)
+                                        .font(.system(size: 8, weight: .regular))
+                                        .foregroundStyle(style.textColor)
+                                }
                             }
                         }
                     }
                     HStack(spacing: 16) {
                         ForEach(2..<4, id: \.self) { index in
+                            let style = getButtonStyle(for: countries[index])
                             VStack {
                                 makeButtons(for: countries[index])
-                                Text("Correct")
-                                    .font(.system(size: 6, weight: .regular, design: .default))
+                                if style.showLabel {
+                                    Text(style.labelText)
+                                        .font(.system(size: 8, weight: .regular))
+                                        .foregroundStyle(style.textColor)
+                                }
                             }
                         }
                     }
@@ -154,6 +163,39 @@ struct MainView: View {
         }
     }
     
+    //Method to get button style as well as the text color/visibility
+    private func getButtonStyle(for country: Country) -> (borderColor: Color,fillColor: Color,textColor: Color,showLabel: Bool,labelText: String) {
+        let correctID = viewModel.getCorrectAnswer()?.id
+        let isSelected = selectedCountryId == country.id
+        let isCorrect = correctID == country.id
+
+        // No selection yet return default style
+        guard selectedCountryId != nil else {
+            return (AppColors.buttonStroke,.clear,.clear,false,"")
+        }
+
+        // Selected and correct
+        if isSelected && isAnswerCorrect == true {
+            return (AppColors.buttonStrokeCorrect,.clear,AppColors.buttonStrokeCorrect,true,
+                "Correct"
+            )
+        }
+
+        // Selected but wrong
+        if isSelected && isAnswerCorrect == false {
+            return (AppColors.titleColor,AppColors.titleColor,AppColors.titleColor,true,"Wrong")
+        }
+
+        // Not selected, but correct answer
+        if !isSelected && isCorrect && isAnswerCorrect == false {
+            return (AppColors.buttonStrokeCorrect,.clear,AppColors.buttonStrokeCorrect,true,"Correct")
+        }
+
+        // Default return for other buttons
+        return (AppColors.buttonStroke,.clear,.clear,false,"")
+    }
+
+    //Helper Method to create the button border/fill colors based on the selection
     private func makeButtons(for country: Country) -> some View {
         let correctAnswerID = viewModel.getCorrectAnswer()?.id
         let isSelected = selectedCountryId == country.id
@@ -162,13 +204,16 @@ struct MainView: View {
         // Determine border color
         let borderColor: Color
         let fillColor: Color
-        if let selected = selectedCountryId {
+        var titleColor: Color = AppColors.titleColor
+        
+        if let _ = selectedCountryId {
             if isSelected && isAnswerCorrect == true {
                 borderColor = AppColors.buttonStrokeCorrect // Correct selection
                 fillColor = Color.clear
             } else if isSelected && isAnswerCorrect == false {
                 borderColor = AppColors.titleColor // Wrong selection
-                fillColor = Color.green
+                fillColor = AppColors.titleColor
+                titleColor = .white
             } else if !isSelected && isCorrect && isAnswerCorrect == false {
                 borderColor = AppColors.buttonStrokeCorrect // Show correct answer after wrong selection
                 fillColor = Color.clear
@@ -186,7 +231,8 @@ struct MainView: View {
         }) {
             Text(country.country_name)
         }
-        .buttonStyle(CustomButtonStyle(borderColor: borderColor, fillColor: fillColor))
+        .buttonStyle(CustomButtonStyle(borderColor: borderColor, fillColor: fillColor, titleColor: titleColor))
+        
     }
     
     private func handleCountrySelection(country: Country) {
