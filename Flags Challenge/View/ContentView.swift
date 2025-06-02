@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var questionsViewModel = CountriesViewModel()
+    @EnvironmentObject var viewModel:  CountriesViewModel
+
     @StateObject private var timerViewModel = TimerViewModel()
     @State private var totalQuestions: Int = 0
     @State private var currentAnswer: Answer?
     @State private var currentIndex: Int = 0
+    @State private var isGameOver = false
     
     var body: some View {
         VStack {
@@ -70,25 +72,30 @@ struct ContentView: View {
             .padding(.horizontal, 5.0)
         }
         .onAppear {
-            questionsViewModel.loadQuestions()
+            viewModel.loadQuestions()
         }
         .onChange(of: timerViewModel.isTimerInvalidated) { _, newValue in
             if newValue {
-                questionsViewModel.nextAnswer()
-                currentAnswer = questionsViewModel.currentAnswer
-                currentIndex = questionsViewModel.currentCountryIndex
+                viewModel.nextAnswer()
+                currentAnswer = viewModel.currentAnswer
+                currentIndex = viewModel.currentCountryIndex
 
-                timerViewModel.startTimer(duration: 20)
+                timerViewModel.startTimer(duration: 2)
             }
         }
-        .onReceive(questionsViewModel.$countries.compactMap { $0 }) { countries in
+        .onChange(of: viewModel.isGameOver) { _, gameOver in
+            if gameOver {
+                timerViewModel.stopTimer()
+            }
+        }
+        .onReceive(viewModel.$countries.compactMap { $0 }) { countries in
             totalQuestions =  countries.questions.count
-            questionsViewModel.currentCountryIndex = 0
-            questionsViewModel.nextAnswer()
-            currentIndex = questionsViewModel.currentCountryIndex
-            currentAnswer = questionsViewModel.currentAnswer
+            viewModel.currentCountryIndex = 0
+            viewModel.nextAnswer()
+            currentIndex = viewModel.currentCountryIndex
+            currentAnswer = viewModel.currentAnswer
             
-            timerViewModel.startTimer(duration: 20)
+            timerViewModel.startTimer(duration: 2)
         }
         Spacer()
     }

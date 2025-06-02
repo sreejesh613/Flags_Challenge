@@ -10,6 +10,7 @@ import SwiftUI
 struct TimeEntryView: View {
     @State private var time: String = ""
     @StateObject private var timerViewModel = TimerViewModel()
+    @EnvironmentObject private var countriesViewModel:  CountriesViewModel
     @State private var startCountdown: Bool = false
 
     var body: some View {

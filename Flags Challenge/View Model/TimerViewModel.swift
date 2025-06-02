@@ -63,27 +63,4 @@ class TimerViewModel: ObservableObject {
         timer = nil
         isTimerRunning = false
     }
-    
-    func resetTimer() {
-        stopTimer()
-        timer?.invalidate()
-        isTimerRunning = false
-    }
-    
-    func totalTimeDurationInSeconds(_ time: String) -> Int {
-        let components = time.split(separator: ":")
-        guard components.count == 3 else { return 0 }
-        
-        let hours = components[0]
-        let minutes = components[1]
-        let seconds = components[2]
-        
-        guard let hr = Int(hours) else { return 0 }
-        let hr1 = hr * 60 * 60
-        guard let mn = Int(minutes) else { return 0 }
-        let mn1 = mn * 60
-        guard let sc = Int(seconds) else { return 0 }
-        
-        return hr1 + mn1 + sc
-    }
 }
