@@ -64,7 +64,7 @@ struct MainView: View {
                 viewModel.nextAnswer()
                 selectedCountryId = nil
                 isAnswerCorrect = nil
-                timerViewModel.startTimer(duration: 10)
+                timerViewModel.startTimer(duration: 20)
             }
         }
         .onReceive(viewModel.$countries.compactMap { $0 }) { countries in
@@ -74,7 +74,7 @@ struct MainView: View {
             currentIndex = viewModel.currentCountryIndex
             currentAnswer = viewModel.currentAnswer
             
-            timerViewModel.startTimer(duration: 10)
+            timerViewModel.startTimer(duration: 20)
         }
         Spacer()
     }
