@@ -10,12 +10,7 @@ struct BaseView: ViewModifier {
     func body(content: Content) -> some View {
         content
         RoundedRectangle(cornerRadius: 16)
-            .fill(Color(
-                red: 217/255.0,
-                green: 217/255.0,
-                blue: 217/255.0,
-                opacity: 0.3
-            ))
+            .fill(AppColors.baseViewBackground)
             .allowsHitTesting(false)
     }
 }
@@ -23,5 +18,18 @@ struct BaseView: ViewModifier {
 extension View {
     func applyBaseViewStyle() -> some View {
         self.modifier(BaseView())
+    }
+}
+
+public func commonTitle() -> some View {
+    VStack {
+        VStack(alignment: .center) {
+            Text("FLAGS CHALLENGE")
+                .font(.system(size: 20, weight: .semibold, design: .default))
+                .foregroundColor(AppColors.titleColor)
+        }
+        .padding(.horizontal, 10)
+        Divider()
+            .frame(height: 1.0)
     }
 }

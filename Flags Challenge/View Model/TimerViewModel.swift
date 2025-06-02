@@ -24,6 +24,12 @@ class TimerViewModel: ObservableObject {
         return String(format: "%02d:%02d:%02d", hrs, mins, secs)
     }
     
+    var formattedQuestionTimer: String {
+        let mins = (timeRemaining % 3600)/60
+        let secs = timeRemaining % 60
+        return String(format: "%02d:%02d", mins, secs)
+    }
+    
     func startCountDownTimerFromInput() {
         let hrs = Int(hours) ?? 0
         let mns = Int(minutes) ?? 0
@@ -35,13 +41,13 @@ class TimerViewModel: ObservableObject {
     
     func startTimer(duration: Int) {
         timeRemaining = duration
-        isTimerInvalidated = false
-        isTimerRunning = true
-        
         timer?.invalidate()
+        isTimerInvalidated = false
+
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
-            
+            isTimerRunning = true
+
             if timeRemaining > 0 {
                 timeRemaining -= 1
             } else {
