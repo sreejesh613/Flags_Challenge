@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//Helper method to create the custom buttons
 struct CustomButtonStyle: ButtonStyle {
     var borderColor: Color
     var fillColor: Color?
@@ -30,6 +31,7 @@ struct CustomButtonStyle: ButtonStyle {
     }
 }
 
+//Common title - reusable view
 @ViewBuilder
 public func commonTitle() -> some View {
     VStack {

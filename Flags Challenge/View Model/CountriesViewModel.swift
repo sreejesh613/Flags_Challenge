@@ -35,6 +35,7 @@ class CountriesViewModel: ObservableObject {
         }
     }
     
+    //Check the anser - user input on the button
     func checkAnswer(selectedAnswer: Int) -> Bool {
         // Check if the selected country ID matches the correct answer ID
         guard let currentQuestion = countries?.questions.first(where: { question in
@@ -47,6 +48,7 @@ class CountriesViewModel: ObservableObject {
         return currentQuestion.answer_id == selectedAnswer
     }
     
+    //Helper method to show the correct answer - Highlight the button
     func getCorrectAnswer() -> Country? {
         guard let currentQuestion = getCurrentQuestion() else { return nil }
         return currentQuestion.countries.first { $0.id == currentQuestion.answer_id }

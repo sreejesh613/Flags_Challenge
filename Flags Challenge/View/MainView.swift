@@ -19,7 +19,10 @@ struct MainView: View {
     
     @State private var selectedCountryId: Int?
     @State private var isAnswerCorrect: Bool?
+    
+    @State private var score: Int = 0
 
+    //Body of the Swift UI view
     var body: some View {
         VStack {
             ZStack {
@@ -76,6 +79,7 @@ struct MainView: View {
         Spacer()
     }
     
+    //Common view - Question timer, title and divider line
     private func commonView() -> some View {
         HStack {
             ZStack(alignment: .center) {
@@ -95,6 +99,7 @@ struct MainView: View {
         .padding(.horizontal, 10)
     }
     
+    //Main content view
     @ViewBuilder
     private func contentView() -> some View {
         HStack {
@@ -176,9 +181,8 @@ struct MainView: View {
 
         // Selected and correct
         if isSelected && isAnswerCorrect == true {
-            return (AppColors.buttonStrokeCorrect,.clear,AppColors.buttonStrokeCorrect,true,
-                "Correct"
-            )
+            score += 1
+            return (AppColors.buttonStrokeCorrect,.clear,AppColors.buttonStrokeCorrect,true,"Correct")
         }
 
         // Selected but wrong
@@ -235,11 +239,19 @@ struct MainView: View {
         
     }
     
+    //Helper function to check the answer and to calculate the score
     private func handleCountrySelection(country: Country) {
+        //Prevents multiple taps
+        guard selectedCountryId == nil else { return }
         selectedCountryId = country.id
-        isAnswerCorrect = viewModel.checkAnswer(selectedAnswer: country.id)
+        let isCorrect = viewModel.checkAnswer(selectedAnswer: country.id)
+        isAnswerCorrect = isCorrect
+        if isCorrect {
+            score += 1
+        }
     }
     
+    //Game over title
     private func gameOver() -> some View {
         VStack(alignment: .center) {
             Spacer()
@@ -251,12 +263,13 @@ struct MainView: View {
         .padding(.horizontal, 10)
     }
     
+    //Totla score title
     private func totalScore() -> some View {
         HStack {
             Text("SCORE: ")
                 .font(.system(size: 20, weight: .regular, design: .default))
                 .foregroundColor(AppColors.titleColor)
-            Text("N/A")
+            Text("\(score)/\(totalQuestions)")
                 .font(.system(size: 30, weight: .semibold, design: .default))
                 .foregroundColor(AppColors.buttonStroke)
         }

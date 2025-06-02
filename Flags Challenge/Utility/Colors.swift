@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+//Static variables of the colors used across the app
 struct AppColors {
     static let baseViewBackground = Color(red: 217/255.0,green: 217/255.0,blue: 217/255.0,opacity: 0.3)
     static let titleColor = Color(red: 255/255.0, green: 112/255.0, blue: 67/255.0, opacity: 1.0)
