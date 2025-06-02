@@ -15,6 +15,7 @@ class CountriesViewModel: ObservableObject {
     }
     @Published var totalQuestions: Int = 0
     @Published var currentCountryIndex = 0
+    @Published var isGameOver = false
     
     var currentAnswer: Answer? {
         guard let questions = countries?.questions, questions.indices.contains(currentCountryIndex) else { return nil }
@@ -30,7 +31,7 @@ class CountriesViewModel: ObservableObject {
         if currentCountryIndex < (countries?.questions.count ?? 0) - 1 {
             currentCountryIndex += 1
         } else {
-            currentCountryIndex = 0
+            isGameOver = true
         }
     }
     
