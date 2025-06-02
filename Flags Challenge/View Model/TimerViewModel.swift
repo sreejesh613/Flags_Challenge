@@ -16,7 +16,8 @@ class TimerViewModel: ObservableObject {
     
     var timer: Timer?
     var isTimerRunning = false
-    
+
+    //Formats the time in two decimal spaces
     var formattedTime: String {
         let hrs = timeRemaining/3600
         let mins = (timeRemaining % 3600)/60

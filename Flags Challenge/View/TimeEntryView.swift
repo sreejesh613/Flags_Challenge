@@ -13,6 +13,7 @@ struct TimeEntryView: View {
     @EnvironmentObject private var countriesViewModel:  CountriesViewModel
     @State private var startCountdown: Bool = false
 
+    //Body of the Swift UI view
     var body: some View {
         VStack {
             ZStack(alignment: .center) {
@@ -69,6 +70,7 @@ struct TimeEntryView: View {
         }
     }
     
+    //Main countdown timer
     private func countDownTimer() -> some View {
         VStack {
             Text("CHALLENGE")

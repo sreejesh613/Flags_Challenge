@@ -7,21 +7,31 @@
 
 import SwiftUI
 
+//Helper method to create the custom buttons
 struct CustomButtonStyle: ButtonStyle {
+    var borderColor: Color
+    var fillColor: Color?
+    var titleColor = AppColors.buttonTitle
+    
     func makeBody(configuration: Self.Configuration) -> some View {
         return configuration.label
             .padding()
-            .foregroundColor(AppColors.buttonTitle)
+            .foregroundColor(titleColor)
             .opacity(configuration.isPressed ? 0.7 : 1)
             .scaleEffect(configuration.isPressed ? 0.8 : 1)
             .frame(maxWidth: .infinity, maxHeight: 32.0)
+            .background(
+                RoundedRectangle(cornerRadius: 8.0)
+                    .fill(fillColor ?? Color.clear)
+            )
             .overlay {
                 RoundedRectangle(cornerRadius: 8.0)
-                    .stroke(AppColors.buttonStroke)
+                    .stroke(borderColor, lineWidth: 2.0)
             }
     }
 }
 
+//Common title - reusable view
 @ViewBuilder
 public func commonTitle() -> some View {
     VStack {

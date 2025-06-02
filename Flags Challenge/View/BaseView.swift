@@ -6,6 +6,7 @@
 //
 import SwiftUI
 
+//Background view - reusable
 struct BaseView: ViewModifier {
     func body(content: Content) -> some View {
         content

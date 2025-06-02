@@ -7,6 +7,7 @@
 
 import Foundation
 
+//Helper method to load the json file/data from the bundle
 class JsonLoader {
     static func loadCountries() -> Questions? {
         guard let url = Bundle.main.url(forResource: "countries", withExtension: "json"),
