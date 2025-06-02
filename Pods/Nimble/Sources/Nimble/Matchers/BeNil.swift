@@ -8,47 +8,37 @@ extension Optional: _OptionalProtocol {
 }
 
 /// A Nimble matcher that succeeds when the actual value is nil.
-public func beNil<T>() -> Matcher<T> {
-    return Matcher.simpleNilable("be nil") { actualExpression in
+public func beNil<T>() -> Predicate<T> {
+    return Predicate.simpleNilable("be nil") { actualExpression in
         let actualValue = try actualExpression.evaluate()
         if let actual = actualValue, let nestedOptionl = actual as? _OptionalProtocol {
-            return MatcherStatus(bool: nestedOptionl.isNil)
+            return PredicateStatus(bool: nestedOptionl.isNil)
         }
-        return MatcherStatus(bool: actualValue == nil)
+        return PredicateStatus(bool: actualValue == nil)
     }
 }
 
-/// Represents `nil` value to be used with the operator overloads for `beNil`.
-public struct ExpectationNil: ExpressibleByNilLiteral {
-    public init(nilLiteral: ()) {}
-}
+extension Expectation {
+    /// Represents `nil` value to be used with the operator overloads for `beNil`.
+    public struct Nil: ExpressibleByNilLiteral {
+        public init(nilLiteral: ()) {}
+    }
 
-extension SyncExpectation {
-    public static func == (lhs: SyncExpectation, rhs: ExpectationNil) {
+    public static func == (lhs: Expectation, rhs: Expectation.Nil) {
         lhs.to(beNil())
     }
 
-    public static func != (lhs: SyncExpectation, rhs: ExpectationNil) {
+    public static func != (lhs: Expectation, rhs: Expectation.Nil) {
         lhs.toNot(beNil())
-    }
-}
-
-extension AsyncExpectation {
-    public static func == (lhs: AsyncExpectation, rhs: ExpectationNil) async {
-        await lhs.to(beNil())
-    }
-
-    public static func != (lhs: AsyncExpectation, rhs: ExpectationNil) async {
-        await lhs.toNot(beNil())
     }
 }
 
 #if canImport(Darwin)
 import Foundation
 
-extension NMBMatcher {
-    @objc public class func beNilMatcher() -> NMBMatcher {
-        return NMBMatcher { actualExpression in
+extension NMBPredicate {
+    @objc public class func beNilMatcher() -> NMBPredicate {
+        return NMBPredicate { actualExpression in
             return try beNil().satisfies(actualExpression).toObjectiveC()
         }
     }

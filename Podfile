@@ -8,8 +8,9 @@ target 'Flags Challenge' do
   # Pods for Flags Challenge
 
   def testing_pods
-      pod 'Quick'
-      pod 'Nimble'
+      pod 'Quick', '5.0.1'
+      pod 'Nimble', '10.0.0'
+      pod 'ViewInspector', '0.9.9'
   end
 
   target 'Flags ChallengeTests' do

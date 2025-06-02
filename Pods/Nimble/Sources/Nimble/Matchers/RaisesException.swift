@@ -18,7 +18,7 @@ public func raiseException<Out>(
     reason: String? = nil,
     userInfo: NSDictionary? = nil,
     closure: ((NSException) -> Void)? = nil
-) -> Matcher<Out> {
+) -> Predicate<Out> {
     return raiseException(named: named?.rawValue, reason: reason, userInfo: userInfo, closure: closure)
 }
 
@@ -36,8 +36,8 @@ public func raiseException<Out>(
     reason: String? = nil,
     userInfo: NSDictionary? = nil,
     closure: ((NSException) -> Void)? = nil
-) -> Matcher<Out> {
-    return Matcher { actualExpression in
+) -> Predicate<Out> {
+    return Predicate { actualExpression in
         var exception: NSException?
         let capture = NMBExceptionCapture(handler: ({ e in
             exception = e
@@ -48,7 +48,7 @@ public func raiseException<Out>(
                 _ = try actualExpression.evaluate()
             }
         } catch {
-            return MatcherResult(status: .fail, message: .fail("unexpected error thrown: <\(error)>"))
+            return PredicateResult(status: .fail, message: .fail("unexpected error thrown: <\(error)>"))
         }
 
         let message = messageForException(
@@ -66,7 +66,7 @@ public func raiseException<Out>(
             userInfo: userInfo,
             closure: closure
         )
-        return MatcherResult(bool: matches, message: message)
+        return PredicateResult(bool: matches, message: message)
     }
 }
 
@@ -141,7 +141,7 @@ internal func exceptionMatchesNonNilFieldsOrClosure(
         return matches
 }
 
-public class NMBObjCRaiseExceptionMatcher: NMBMatcher {
+public class NMBObjCRaiseExceptionPredicate: NMBPredicate {
     private let _name: String?
     private let _reason: String?
     private let _userInfo: NSDictionary?
@@ -153,22 +153,22 @@ public class NMBObjCRaiseExceptionMatcher: NMBMatcher {
         _userInfo = userInfo
         _block = block
 
-        let matcher: Matcher<NSObject> = raiseException(
+        let predicate: Predicate<NSObject> = raiseException(
             named: name,
             reason: reason,
             userInfo: userInfo,
             closure: block
         )
-        let matcherBlock: MatcherBlock = { actualExpression in
-            return try matcher.satisfies(actualExpression).toObjectiveC()
+        let predicateBlock: PredicateBlock = { actualExpression in
+            return try predicate.satisfies(actualExpression).toObjectiveC()
         }
-        super.init(matcher: matcherBlock)
+        super.init(predicate: predicateBlock)
     }
 
-    @objc public var named: (_ name: String) -> NMBObjCRaiseExceptionMatcher {
+    @objc public var named: (_ name: String) -> NMBObjCRaiseExceptionPredicate {
         let (reason, userInfo, block) = (_reason, _userInfo, _block)
         return { name in
-            return NMBObjCRaiseExceptionMatcher(
+            return NMBObjCRaiseExceptionPredicate(
                 name: name,
                 reason: reason,
                 userInfo: userInfo,
@@ -177,10 +177,10 @@ public class NMBObjCRaiseExceptionMatcher: NMBMatcher {
         }
     }
 
-    @objc public var reason: (_ reason: String?) -> NMBObjCRaiseExceptionMatcher {
+    @objc public var reason: (_ reason: String?) -> NMBObjCRaiseExceptionPredicate {
         let (name, userInfo, block) = (_name, _userInfo, _block)
         return { reason in
-            return NMBObjCRaiseExceptionMatcher(
+            return NMBObjCRaiseExceptionPredicate(
                 name: name,
                 reason: reason,
                 userInfo: userInfo,
@@ -189,10 +189,10 @@ public class NMBObjCRaiseExceptionMatcher: NMBMatcher {
         }
     }
 
-    @objc public var userInfo: (_ userInfo: NSDictionary?) -> NMBObjCRaiseExceptionMatcher {
+    @objc public var userInfo: (_ userInfo: NSDictionary?) -> NMBObjCRaiseExceptionPredicate {
         let (name, reason, block) = (_name, _reason, _block)
         return { userInfo in
-            return NMBObjCRaiseExceptionMatcher(
+            return NMBObjCRaiseExceptionPredicate(
                 name: name,
                 reason: reason,
                 userInfo: userInfo,
@@ -201,10 +201,10 @@ public class NMBObjCRaiseExceptionMatcher: NMBMatcher {
         }
     }
 
-    @objc public var satisfyingBlock: (_ block: ((NSException) -> Void)?) -> NMBObjCRaiseExceptionMatcher {
+    @objc public var satisfyingBlock: (_ block: ((NSException) -> Void)?) -> NMBObjCRaiseExceptionPredicate {
         let (name, reason, userInfo) = (_name, _reason, _userInfo)
         return { block in
-            return NMBObjCRaiseExceptionMatcher(
+            return NMBObjCRaiseExceptionPredicate(
                 name: name,
                 reason: reason,
                 userInfo: userInfo,
@@ -214,9 +214,9 @@ public class NMBObjCRaiseExceptionMatcher: NMBMatcher {
     }
 }
 
-extension NMBMatcher {
-    @objc public class func raiseExceptionMatcher() -> NMBObjCRaiseExceptionMatcher {
-        return NMBObjCRaiseExceptionMatcher(name: nil, reason: nil, userInfo: nil, block: nil)
+extension NMBPredicate {
+    @objc public class func raiseExceptionMatcher() -> NMBObjCRaiseExceptionPredicate {
+        return NMBObjCRaiseExceptionPredicate(name: nil, reason: nil, userInfo: nil, block: nil)
     }
 }
 #endif

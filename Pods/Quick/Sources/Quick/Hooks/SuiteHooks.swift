@@ -14,28 +14,18 @@ final internal class SuiteHooks {
         afters.append(closure)
     }
 
-    @MainActor
     internal func executeBefores() {
         phase = .beforesExecuting
         for before in befores {
-            do {
-                try before()
-            } catch {
-                break
-            }
+            before()
         }
         phase = .beforesFinished
     }
 
-    @MainActor
     internal func executeAfters() {
         phase = .aftersExecuting
         for after in afters {
-            do {
-                try after()
-            } catch {
-                break
-            }
+            after()
         }
         phase = .aftersFinished
     }
