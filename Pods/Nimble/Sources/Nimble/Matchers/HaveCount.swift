@@ -5,8 +5,8 @@
 
 /// A Nimble matcher that succeeds when the actual Collection's count equals
 /// the expected value
-public func haveCount<T: Collection>(_ expectedValue: Int) -> Matcher<T> {
-    return Matcher.define { actualExpression in
+public func haveCount<T: Collection>(_ expectedValue: Int) -> Predicate<T> {
+    return Predicate.define { actualExpression in
         if let actualValue = try actualExpression.evaluate() {
             let message = ExpectationMessage
                 .expectedCustomValueTo(
@@ -16,28 +16,29 @@ public func haveCount<T: Collection>(_ expectedValue: Int) -> Matcher<T> {
                 .appended(details: "Actual Value: \(stringify(actualValue))")
 
             let result = expectedValue == actualValue.count
-            return MatcherResult(bool: result, message: message)
+            return PredicateResult(bool: result, message: message)
         } else {
-            return MatcherResult(status: .fail, message: .fail(""))
+            return PredicateResult(status: .fail, message: .fail(""))
         }
     }
 }
 
 /// A Nimble matcher that succeeds when the actual collection's count equals
 /// the expected value
-public func haveCount(_ expectedValue: Int) -> Matcher<NMBCollection> {
-    return Matcher { actualExpression in
+public func haveCount(_ expectedValue: Int) -> Predicate<NMBCollection> {
+    return Predicate { actualExpression in
         if let actualValue = try actualExpression.evaluate() {
             let message = ExpectationMessage
                 .expectedCustomValueTo(
                     "have \(prettyCollectionType(actualValue)) with count \(stringify(expectedValue))",
-                    actual: "\(actualValue.count). Actual Value: \(stringify(actualValue))"
+                    actual: "\(actualValue.count)"
                 )
+                .appended(details: "Actual Value: \(stringify(actualValue))")
 
             let result = expectedValue == actualValue.count
-            return MatcherResult(bool: result, message: message)
+            return PredicateResult(bool: result, message: message)
         } else {
-            return MatcherResult(status: .fail, message: .fail(""))
+            return PredicateResult(status: .fail, message: .fail(""))
         }
     }
 }
@@ -45,9 +46,9 @@ public func haveCount(_ expectedValue: Int) -> Matcher<NMBCollection> {
 #if canImport(Darwin)
 import Foundation
 
-extension NMBMatcher {
-    @objc public class func haveCountMatcher(_ expected: NSNumber) -> NMBMatcher {
-        return NMBMatcher { actualExpression in
+extension NMBPredicate {
+    @objc public class func haveCountMatcher(_ expected: NSNumber) -> NMBPredicate {
+        return NMBPredicate { actualExpression in
             let location = actualExpression.location
             let actualValue = try actualExpression.evaluate()
             if let value = actualValue as? NMBCollection {
@@ -66,7 +67,7 @@ extension NMBMatcher {
                     .expectedActualValueTo("have a collection with count \(stringify(expected.intValue))")
                     .appendedBeNilHint()
             }
-            return NMBMatcherResult(status: .fail, message: message.toObjectiveC())
+            return NMBPredicateResult(status: .fail, message: message.toObjectiveC())
         }
     }
 }
