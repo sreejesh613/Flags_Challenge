@@ -61,7 +61,7 @@ struct TimeEntryView: View {
                 }
             }
             .fullScreenCover(isPresented: $timerViewModel.isTimerInvalidated) {
-                ContentView()
+                MainView()
             }
             .frame(width: .infinity, height: 270)
             .padding(.horizontal, 5.0)
