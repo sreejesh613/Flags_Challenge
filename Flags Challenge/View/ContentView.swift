@@ -32,9 +32,6 @@ struct ContentView: View {
                             .frame(maxWidth: .infinity, alignment: .center)
                         Spacer()
                     }
-                    .onAppear {
-                        timerViewModel.startTimer(duration: 30)
-                    }
                     .padding(.top, 20.0)
                     .padding(.horizontal, 10)
                     Spacer()
@@ -81,7 +78,7 @@ struct ContentView: View {
                 currentAnswer = questionsViewModel.currentAnswer
                 currentIndex = questionsViewModel.currentCountryIndex
 
-                timerViewModel.startTimer(duration: 5)
+                timerViewModel.startTimer(duration: 20)
             }
         }
         .onReceive(questionsViewModel.$countries.compactMap { $0 }) { countries in
@@ -91,8 +88,7 @@ struct ContentView: View {
             currentIndex = questionsViewModel.currentCountryIndex
             currentAnswer = questionsViewModel.currentAnswer
             
-            timerViewModel.startTimer(duration: 5)
-            print("Total questions: \(totalQuestions)")
+            timerViewModel.startTimer(duration: 20)
         }
         Spacer()
     }

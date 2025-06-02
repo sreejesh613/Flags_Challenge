@@ -20,16 +20,3 @@ extension View {
         self.modifier(BaseView())
     }
 }
-
-public func commonTitle() -> some View {
-    VStack {
-        VStack(alignment: .center) {
-            Text("FLAGS CHALLENGE")
-                .font(.system(size: 20, weight: .semibold, design: .default))
-                .foregroundColor(AppColors.titleColor)
-        }
-        .padding(.horizontal, 10)
-        Divider()
-            .frame(height: 1.0)
-    }
-}
