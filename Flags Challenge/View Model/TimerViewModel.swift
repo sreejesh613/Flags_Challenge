@@ -63,4 +63,9 @@ class TimerViewModel: ObservableObject {
         timer = nil
         isTimerRunning = false
     }
+    
+    func resetTimer() {
+        guard timer != nil else { return }
+        isTimerRunning = false
+    }
 }
