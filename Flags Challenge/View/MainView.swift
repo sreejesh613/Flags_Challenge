@@ -16,6 +16,9 @@ struct MainView: View {
     @State private var currentIndex: Int = 0
     @State private var index = 0
     @State private var showScoreCard = false
+    
+    @State private var selectedCountryId: Int?
+    @State private var isAnswerCorrect: Bool?
 
     var body: some View {
         VStack {
@@ -23,7 +26,9 @@ struct MainView: View {
                 VStack {
                     if showScoreCard {
                         commonView()
+                        Spacer()
                         totalScore()
+                        Spacer()
                     } else if viewModel.isGameOver {
                         commonView()
                         gameOver()
@@ -54,7 +59,9 @@ struct MainView: View {
             index = currentIndex
             if newValue && !viewModel.isGameOver {
                 viewModel.nextAnswer()
-                timerViewModel.startTimer(duration: 1)
+                selectedCountryId = nil
+                isAnswerCorrect = nil
+                timerViewModel.startTimer(duration: 10)
             }
         }
         .onReceive(viewModel.$countries.compactMap { $0 }) { countries in
@@ -64,12 +71,12 @@ struct MainView: View {
             currentIndex = viewModel.currentCountryIndex
             currentAnswer = viewModel.currentAnswer
             
-            timerViewModel.startTimer(duration: 1)
+            timerViewModel.startTimer(duration: 10)
         }
         Spacer()
     }
     
-    @ViewBuilder private func commonView() -> some View {
+    private func commonView() -> some View {
         HStack {
             ZStack(alignment: .center) {
                 RoundedRectangle(cornerRadius: 10)
@@ -86,10 +93,10 @@ struct MainView: View {
         }
         .padding(.top, 20.0)
         .padding(.horizontal, 10)
-        Spacer()
     }
     
-    @ViewBuilder private func contentView() -> some View {
+    @ViewBuilder
+    private func contentView() -> some View {
         HStack {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
@@ -124,25 +131,21 @@ struct MainView: View {
         HStack {
             VStack {
                 if let countries = currentAnswer?.countries, countries.count >= 4 {
-                    VStack(spacing: 16) {
-                        HStack(spacing: 16) {
-                            ForEach(0..<2, id: \.self) { index in
-                                Button(action: {
-                                    //Button action
-                                }) {
-                                    Text(countries[index].country_name)
-                                }
-                                .buttonStyle(CustomButtonStyle())
+                    HStack(spacing: 16) {
+                        ForEach(0..<2, id: \.self) { index in
+                            VStack {
+                                makeButtons(for: countries[index])
+                                Text("Correct")
+                                    .font(.system(size:6, weight: .regular, design: .default))
                             }
                         }
-                        HStack(spacing: 16) {
-                            ForEach(2..<4, id: \.self) { index in
-                                Button(action: {
-                                    //Button action
-                                }) {
-                                    Text(countries[index].country_name)
-                                }
-                                .buttonStyle(CustomButtonStyle())
+                    }
+                    HStack(spacing: 16) {
+                        ForEach(2..<4, id: \.self) { index in
+                            VStack {
+                                makeButtons(for: countries[index])
+                                Text("Correct")
+                                    .font(.system(size: 6, weight: .regular, design: .default))
                             }
                         }
                     }
@@ -151,18 +154,57 @@ struct MainView: View {
         }
     }
     
-    @ViewBuilder
+    private func makeButtons(for country: Country) -> some View {
+        let correctAnswerID = viewModel.getCorrectAnswer()?.id
+        let isSelected = selectedCountryId == country.id
+        let isCorrect = correctAnswerID == country.id
+
+        // Determine border color
+        let borderColor: Color
+        let fillColor: Color
+        if let selected = selectedCountryId {
+            if isSelected && isAnswerCorrect == true {
+                borderColor = AppColors.buttonStrokeCorrect // Correct selection
+                fillColor = Color.clear
+            } else if isSelected && isAnswerCorrect == false {
+                borderColor = AppColors.titleColor // Wrong selection
+                fillColor = Color.green
+            } else if !isSelected && isCorrect && isAnswerCorrect == false {
+                borderColor = AppColors.buttonStrokeCorrect // Show correct answer after wrong selection
+                fillColor = Color.clear
+            } else {
+                borderColor = AppColors.buttonStroke
+                fillColor = Color.clear
+            }
+        } else {
+            borderColor = AppColors.buttonStroke
+            fillColor = Color.clear
+        }
+
+        return Button(action: {
+            handleCountrySelection(country: country)
+        }) {
+            Text(country.country_name)
+        }
+        .buttonStyle(CustomButtonStyle(borderColor: borderColor, fillColor: fillColor))
+    }
+    
+    private func handleCountrySelection(country: Country) {
+        selectedCountryId = country.id
+        isAnswerCorrect = viewModel.checkAnswer(selectedAnswer: country.id)
+    }
+    
     private func gameOver() -> some View {
         VStack(alignment: .center) {
+            Spacer()
             Text("GAME OVER")
                 .font(.system(size: 35, weight: .semibold, design: .default))
                 .foregroundColor(AppColors.buttonStroke)
+            Spacer()
         }
         .padding(.horizontal, 10)
-        Spacer()
     }
     
-    @ViewBuilder
     private func totalScore() -> some View {
         HStack {
             Text("SCORE: ")
@@ -172,7 +214,6 @@ struct MainView: View {
                 .font(.system(size: 30, weight: .semibold, design: .default))
                 .foregroundColor(AppColors.buttonStroke)
         }
-        Spacer()
     }
 }
 
