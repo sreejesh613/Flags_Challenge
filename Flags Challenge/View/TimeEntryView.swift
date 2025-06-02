@@ -68,20 +68,6 @@ struct TimeEntryView: View {
         }
     }
     
-    private func commonTitle() -> some View {
-        VStack {
-            VStack(alignment: .center) {
-                Text("FLAGS CHALLENGE")
-                    .foregroundStyle(.red)
-                    .fontWeight(.heavy)
-                    .bold()
-            }
-            .padding(.horizontal, 10)
-            Divider()
-                .frame(height: 1.0)
-        }
-    }
-    
     private func countDownTimer() -> some View {
         VStack {
             Text("CHALLENGE")
@@ -92,7 +78,7 @@ struct TimeEntryView: View {
                 .padding(.bottom, 15)
             Text(timerViewModel.formattedTime)
                 .font(.system(size: 28.0, weight: .semibold))
-                .foregroundStyle(Color(red: 120.0/255.0, green: 120.0/255.0, blue: 120.0/255.0, opacity: 1.0))
+                .foregroundStyle(AppColors.mainTimer)
         }
     }
 }

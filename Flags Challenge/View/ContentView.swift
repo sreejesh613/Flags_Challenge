@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var timeRemaining = 10
     @StateObject private var questionsViewModel = CountriesViewModel()
     @StateObject private var timerViewModel = TimerViewModel()
     @State private var totalQuestions: Int = 0
@@ -19,28 +18,34 @@ struct ContentView: View {
         VStack {
             ZStack {
                 VStack {
-                    HStack(alignment: .center) {
-                        Text("\(timerViewModel.timeRemaining)")
+                    HStack {
+                        ZStack(alignment: .center) {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.black)
+                                .frame(width: 80.0, height: 50.0)
+                            Text("\(timerViewModel.formattedQuestionTimer)")
+                                .font(.system(size: 20, weight: .semibold, design: .default))
+                                .foregroundStyle(Color.white)
+                        }
                         Spacer()
-                        Text("FLAGS CHALLENGE")
+                        commonTitle()
+                            .frame(maxWidth: .infinity, alignment: .center)
                         Spacer()
                     }
                     .onAppear {
-                        timerViewModel.startTimer(duration: 10)
+                        timerViewModel.startTimer(duration: 30)
                     }
                     .padding(.top, 20.0)
                     .padding(.horizontal, 10)
-                    Divider()
-                        .frame(height: 1.0)
                     Spacer()
-                    
+
                     HStack {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(Color.black)
                                 .frame(width: 50.0, height: 35.0)
                             Circle()
-                                .fill(Color(red: 255/255.0, green: 112/255.0, blue: 67/255.0, opacity: 1.0))
+                                .fill(AppColors.titleColor)
                                 .frame(width: 35.0, height: 35.0)
                             Text("\(currentIndex)" + "/" +  "\(totalQuestions)")
                                 .foregroundStyle(.white)
@@ -76,7 +81,7 @@ struct ContentView: View {
                 currentAnswer = questionsViewModel.currentAnswer
                 currentIndex = questionsViewModel.currentCountryIndex
 
-                timerViewModel.startTimer(duration: 10)
+                timerViewModel.startTimer(duration: 5)
             }
         }
         .onReceive(questionsViewModel.$countries.compactMap { $0 }) { countries in
@@ -86,7 +91,7 @@ struct ContentView: View {
             currentIndex = questionsViewModel.currentCountryIndex
             currentAnswer = questionsViewModel.currentAnswer
             
-            timerViewModel.startTimer(duration: 10)
+            timerViewModel.startTimer(duration: 5)
             print("Total questions: \(totalQuestions)")
         }
         Spacer()
@@ -128,13 +133,13 @@ struct CustomButtonStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
         return configuration.label
             .padding()
-            .foregroundColor(Color(red: 58/255, green: 58/255, blue: 58/255, opacity: 1))
+            .foregroundColor(AppColors.buttonTitle)
             .opacity(configuration.isPressed ? 0.7 : 1)
             .scaleEffect(configuration.isPressed ? 0.8 : 1)
             .frame(maxWidth: .infinity, maxHeight: 32.0)
             .overlay {
                 RoundedRectangle(cornerRadius: 8.0)
-                    .stroke(Color(red: 72/255, green: 72/255, blue: 72/255, opacity: 1))
+                    .stroke(AppColors.buttonStroke)
             }
     }
 }
